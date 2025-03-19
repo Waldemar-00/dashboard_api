@@ -35,12 +35,40 @@ server.get( '/categories/:category+', ( req, res ) =>
 } )
 server.get( '/files/(.*)', ( req, res ) =>
 {
-    res.send( `Category from params: ${ req.params[0] }` )
+    res.send( `Files from params: ${ req.params[0] }` )
+} )
+server.get( '/files/so(me)?', ( req, res ) =>
+{
+    res.send( `(FILES)? from params: ${ req.params[0] }` )
 } )
 
+const callBack = ( req, res, next ) =>
+{
+    log( `CallBack` )
+    next()
+}
+const callBack1 = ( req, res, next ) =>
+{
+    log( `CallBack` )
+    next()
+}
+server.get( /.*a$/, [ callBack, callBack1 ],  ( req, res ) =>
+{
+    res.send( `"/.*a$/" from params: ${ req.params[0] }` )
+} )
+server.route( '/user' )
+    .get( ( _req, res ) =>
+        {
+            res.send('User chaning!')
+    } )
+    .post( ( _req, res ) =>
+    {
+        res.send('Save user data')
+    })
 server.get('(.*)', ( _req, res ) =>
 {
     res.status(404).send( `PAGE NOT FOUND` )
 } )
+
 
 server.listen( port, () => console.log( `Listening on: ${ host }:${ port }` ) )
