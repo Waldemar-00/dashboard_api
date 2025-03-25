@@ -22,7 +22,8 @@
   },
   "dependencies": {
     "chalk": "^5.4.1",
-    "express": "^5.0.0-beta.1"
+    "express": "^5.0.0-beta.1",
+    "tslog": "^4.9.3"
   },
   "devDependencies": {
     "@types/express": "^5.0.1"

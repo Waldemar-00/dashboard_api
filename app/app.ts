@@ -1,23 +1,26 @@
 import express, { Express } from 'express'
-import { userRouter, log } from './router'
+import { userRouter } from './routers/router'
 import { Server } from 'http'
 import chalk from 'chalk'
+import { LoggerService } from './services/logger'
 export class App
 {
-    private app: Express = express()
-    server: Server
-    constructor ( public port: number = 8000,  )
+    private server: Express = express()
+    public serverRefference: Server
+    constructor ( private logger: LoggerService,  public port: number = 8000  )
     {
         this.port = port
+        this.logger = logger
     }
 
     useRouter ()
     {
-        this.app.use( '/', userRouter )
+        this.server.use( '/', userRouter )
     }
     public async init ()
     {
         this.useRouter()
-        this.server = this.app.listen( this.port, () => log( `${ chalk.blue( 'port:' ) } ${ chalk.green( this.port ) }` ) )
+        this.serverRefference = this.server.listen( this.port )
+        this.logger.log( `${ chalk.blue( 'port:' ) } ${ chalk.green( this.port ) }` )
     }
 }
