@@ -7,7 +7,7 @@ export class LoggerService
         hideLogPositionForProduction: true,
     } )
 
-    log ( ...args: unknown[] ): void
+    info ( ...args: unknown[] ): void
     {
         this.logger.info( ...args )
     }

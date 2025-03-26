@@ -1,5 +1,5 @@
 import express, { Express } from 'express'
-import { userRouter } from './routers/router'
+import { userRouter } from './routers/user'
 import { Server } from 'http'
 import chalk from 'chalk'
 import { LoggerService } from './services/logger'
@@ -21,6 +21,6 @@ export class App
     {
         this.useRouter()
         this.serverRefference = this.server.listen( this.port )
-        this.logger.log( `${ chalk.blue( 'port:' ) } ${ chalk.green( this.port ) }` )
+        this.logger.info( `${ chalk.blue( 'port:' ) } ${ chalk.green( this.port ) }` )
     }
 }
