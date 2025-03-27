@@ -4,12 +4,12 @@ import { Router, Response } from 'express'
 
 export abstract class AbstractController<L extends LoggerService, R extends Router>
 {
-    constructor ( protected logger: L, protected  _router: R )
+    constructor ( protected logger: L, protected readonly _router: R )
     {
         this._router = _router
         this.logger = logger
     }
-    get router () { return this.router }
+    get router () { return this._router }
 
     protected bindRouters (routers: IControllerRoute[])
     {
