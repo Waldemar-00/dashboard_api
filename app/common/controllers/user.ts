@@ -1,6 +1,7 @@
 import { AbstractController } from './abstract'
 import { LoggerService } from '../../services/logger'
 import { Request, Response, NextFunction, Router  } from 'express'
+import { HTTPError } from '../../errors/api/error'
 
 
 export class UserController extends AbstractController<LoggerService, Router>
@@ -33,18 +34,26 @@ export class UserController extends AbstractController<LoggerService, Router>
     }
     register (req: Request, res: Response, next: NextFunction)
     {
-        this.ok<string>(res, 'You have been REGISTERED SUCCESSFULLY!')
+        if( !req?.body?.email || !req?.body?.password ) throw new HTTPError( 400, 'NO valid email or password - no REGISTRATION :-(... Try again plaese!' )
+        else this.ok<string>(res, 'You have been REGISTERED SUCCESSFULLY!' )
     }
     login ( req: Request, res: Response, next: NextFunction )
     {
-         this.ok<string>(res, 'You have been LOGIN SUCCESSFULLY!')
+        if( !req?.body?.email || !req?.body?.password ) throw new HTTPError( 400, 'NO valid email or password - no LOGIN :-(... Try again plaese!' )
+        else this.ok<string>(res, 'You have been LOGIN SUCCESSFULLY!' )
     }
     home ( req: Request, res: Response, next: NextFunction )
     {
-         this.ok<string>(res, 'You are on the Home Page!!!!')
+        try {
+            if( req.query.no === 'yes' ) throw new HTTPError( 404, 'NOT FOUND!',`${ req.originalUrl }` )
+            this.ok<string>(res, 'You are on the Home Page!!!!' )
+        } catch ( error ) {
+            throw error
+        }
     }
     user ( req: Request, res: Response, next: NextFunction )
     {
-         this.ok<string>(res, 'You are on the User Page!!!!!!')
+        if( !req.query.id ) throw new HTTPError( 400, 'No user ID - NO user page!')
+        else this.ok<string>(res, 'You are on the User Page!!!!!!')
     }
 }
