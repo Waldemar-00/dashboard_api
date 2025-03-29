@@ -1,5 +1,5 @@
 import { AbstractController } from './abstract'
-import { LoggerService } from '../../services/logger'
+import { LoggerService } from '../../services/logger/logger'
 import { Request, Response, NextFunction, Router  } from 'express'
 import { HTTPError } from '../../errors/api/error'
 

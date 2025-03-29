@@ -1,8 +1,8 @@
 import { Logger, ILogObj } from 'tslog'
-
-export class LoggerService
+import { ILogger } from './interface'
+export class LoggerService implements ILogger
 {
-    private logger: Logger<ILogObj> = new Logger( {
+    logger: Logger<ILogObj> = new Logger( {
         // name: 'tslog info' ,
         hideLogPositionForProduction: true,
     } )

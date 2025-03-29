@@ -1,5 +1,5 @@
 import { App } from './app'
-import { LoggerService } from './services/logger'
+import { LoggerService } from './services/logger/logger'
 import { UserController } from './common/controllers/user'
 import { Router } from 'express'
 import { Exceptions } from './errors/exceptions'

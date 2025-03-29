@@ -1,5 +1,5 @@
 import { NextFunction, Response, Request } from 'express'
-import { LoggerService } from '../services/logger'
+import { LoggerService } from '../services/logger/logger'
 import { HTTPError } from './api/error'
 
 export class Exceptions implements Exceptions
