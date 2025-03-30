@@ -26,6 +26,7 @@
     "tslog": "^4.9.3"
   },
   "devDependencies": {
-    "@types/express": "^5.0.1"
+    "@types/express": "^5.0.1",
+    "typescript": "^5.8.2"
   }
 }
