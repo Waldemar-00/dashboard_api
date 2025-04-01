@@ -64,61 +64,87 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 var log = console.log;
-function AddName(name, surname) {
-    log('AddName STARTED');
-    return function (constructor) {
-        return /** @class */ (function (_super) {
-            __extends(class_1, _super);
-            function class_1() {
-                var _this = _super !== null && _super.apply(this, arguments) || this;
-                _this.name = name;
-                _this.surname = surname;
-                return _this;
-            }
-            return class_1;
-        }(constructor));
-    };
+function AddName(constructor, context) {
+    log(context);
+    return /** @class */ (function (_super) {
+        __extends(class_1, _super);
+        function class_1() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.surname = 'Some_Name';
+            return _this;
+        }
+        return class_1;
+    }(constructor));
 }
-function Greeting(originMethod, context
-// ClassMethodDecoratorContext<User, (name: string) => string>
-) {
-    log('Greeting STARTED');
+function Greeting(originMethod, context) {
     function innerGreeting() {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        log(context);
-        var result = originMethod.call.apply(originMethod, __spreadArray([this], args, false));
         log('Hello ' + args[0]);
-        log(originMethod);
-        return result;
+        return originMethod.call.apply(originMethod, __spreadArray([this], args, false));
     }
+    context.addInitializer(function () {
+        this[context.name] = this[context.name].bind(this);
+        log('This BOUND to the method!');
+    });
     return innerGreeting;
 }
+function isAdmin(originMethod, context) {
+    return function (truth) {
+        if (typeof truth === 'boolean')
+            return originMethod.call(this, truth);
+        else
+            log('Value of Admin must be a boolean');
+    };
+}
+function Prop(_target, context) {
+    log(context);
+    return function (initialValue) {
+        return initialValue + 111;
+    };
+}
 var User = function () {
-    var _classDecorators = [AddName('Anna', 'Brown')];
+    var _classDecorators = [AddName];
     var _classDescriptor;
     var _classExtraInitializers = [];
     var _classThis;
     var _instanceExtraInitializers = [];
+    var _id_decorators;
+    var _id_initializers = [];
+    var _id_extraInitializers = [];
     var _updateName_decorators;
+    var _set_admin_decorators;
     var User = _classThis = /** @class */ (function () {
         function User_1(name) {
             this.name = (__runInitializers(this, _instanceExtraInitializers), name);
+            this.id = __runInitializers(this, _id_initializers, 0);
+            this._admin = (__runInitializers(this, _id_extraInitializers), false);
             this.name = name;
         }
         User_1.prototype.updateName = function (name) {
             this.name = name;
             return this.name;
         };
+        Object.defineProperty(User_1.prototype, "admin", {
+            set: function (truth) {
+                this._admin = truth;
+            },
+            enumerable: false,
+            configurable: true
+        });
         return User_1;
     }());
     __setFunctionName(_classThis, "User");
     (function () {
         var _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
-        _updateName_decorators = [Greeting];
+        _id_decorators = [Prop];
+        _updateName_decorators = [(Greeting)];
+        _set_admin_decorators = [isAdmin];
         __esDecorate(_classThis, null, _updateName_decorators, { kind: "method", name: "updateName", static: false, private: false, access: { has: function (obj) { return "updateName" in obj; }, get: function (obj) { return obj.updateName; } }, metadata: _metadata }, null, _instanceExtraInitializers);
+        __esDecorate(_classThis, null, _set_admin_decorators, { kind: "setter", name: "admin", static: false, private: false, access: { has: function (obj) { return "admin" in obj; }, set: function (obj, value) { obj.admin = value; } }, metadata: _metadata }, null, _instanceExtraInitializers);
+        __esDecorate(null, null, _id_decorators, { kind: "field", name: "id", static: false, private: false, access: { has: function (obj) { return "id" in obj; }, get: function (obj) { return obj.id; }, set: function (obj, value) { obj.id = value; } }, metadata: _metadata }, _id_initializers, _id_extraInitializers);
         __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
         User = _classThis = _classDescriptor.value;
         if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
@@ -129,3 +155,15 @@ var User = function () {
 exports.User = User;
 var user = new User('Violla');
 log(user.updateName('Mickle'));
+log(user.id);
+user._admin = true;
+log(user._admin);
+//* context - {
+//*     kind: 'method',
+//*     name: 'updateName',
+//*     static: false,
+//*     private: false,
+//*     access: { has: [Function: has], get: [Function: get] }, - only if instance of class is being
+//*     metadata: undefined,
+//*     addInitializer: [Function (anonymous)]
+// *}*
