@@ -64,32 +64,19 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 var log = console.log;
-function AddName(constructor, context) {
-    log(context);
-    return /** @class */ (function (_super) {
-        __extends(class_1, _super);
-        function class_1() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.surname = 'Some_Name';
-            return _this;
-        }
-        return class_1;
-    }(constructor));
-}
 function Greeting(originMethod, context) {
-    function innerGreeting() {
+    context.addInitializer(function () {
+        this[context.name] = this[context.name].bind(this);
+        log('This BOUND to the method!');
+    });
+    return function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
         log('Hello ' + args[0]);
         return originMethod.call.apply(originMethod, __spreadArray([this], args, false));
-    }
-    context.addInitializer(function () {
-        this[context.name] = this[context.name].bind(this);
-        log('This BOUND to the method!');
-    });
-    return innerGreeting;
+    };
 }
 function isAdmin(originMethod, context) {
     return function (truth) {
@@ -104,6 +91,28 @@ function Prop(_target, context) {
     return function (initialValue) {
         return initialValue + 111;
     };
+}
+function AddName(constructor, context) {
+    log(context);
+    return /** @class */ (function (_super) {
+        __extends(class_1, _super);
+        function class_1() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.surname = 'Some_Name';
+            return _this;
+        }
+        return class_1;
+    }(constructor));
+}
+function CheckParameter(target, methodKey, index) {
+    log(Object);
+    log(methodKey);
+    log(index);
+    // return function ( ...args: any[] )
+    // {
+    //     if ( typeof args[ index ] === 'string' ) return args[ index ]
+    //     else log('Parametr value must be a string')
+    // }
 }
 var User = function () {
     var _classDecorators = [AddName];
@@ -140,7 +149,7 @@ var User = function () {
     (function () {
         var _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
         _id_decorators = [Prop];
-        _updateName_decorators = [(Greeting)];
+        _updateName_decorators = [Greeting];
         _set_admin_decorators = [isAdmin];
         __esDecorate(_classThis, null, _updateName_decorators, { kind: "method", name: "updateName", static: false, private: false, access: { has: function (obj) { return "updateName" in obj; }, get: function (obj) { return obj.updateName; } }, metadata: _metadata }, null, _instanceExtraInitializers);
         __esDecorate(_classThis, null, _set_admin_decorators, { kind: "setter", name: "admin", static: false, private: false, access: { has: function (obj) { return "admin" in obj; }, set: function (obj, value) { obj.admin = value; } }, metadata: _metadata }, null, _instanceExtraInitializers);
