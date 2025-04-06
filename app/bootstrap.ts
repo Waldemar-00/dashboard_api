@@ -13,4 +13,14 @@ async function bootstrap ()
         new Exceptions( logger )
     ).init()
 }
-bootstrap ()
+bootstrap()
+
+// const AppContainer = new Container()
+// AppContainer.bind<ILogger>( PIECES.ILogger ).to( LoggerService )
+// AppContainer.bind<Exceptions>( PIECES.IExceptions ).to( Exceptions )
+// AppContainer.bind<UserController>( PIECES.UserController ).to( UserController )
+// AppContainer.bind<App>( PIECES.App ).to( App )
+// const APP = AppContainer.get<App>( PIECES.App )
+// APP.init()
+
+// export { AppContainer, APP }
